@@ -22,3 +22,16 @@
     margin-top: 50px;
     gap: 20px;
 }
+.gap-btw{
+    margin-top: 200px;
+}
+.gap-btw-1{
+    margin-top: 30px;
+}
+
+.new-coll-item{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
