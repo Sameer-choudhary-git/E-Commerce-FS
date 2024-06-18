@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './Navbar.css'
 import logo from '../Assets/logo.png'
 import cart from '../Assets/cart_icon.png'
 import { Link } from 'react-router-dom'
+import { ShopContext } from '../../Context/shopContext'
 
 const Navbar = () => {
+    const {token} = useContext(ShopContext);
     const [menu, setmenu] = useState("shop");
+    
+    
+
+    
 
   return (
     <div className='navbar'>
@@ -21,8 +27,9 @@ const Navbar = () => {
             </ul>
         </div>
         <div className="cart-login">
-            <Link to="/cart" style={{textDecoration:"none"}}><img src={cart} alt="cart" /></Link>
-            <Link to='/login' style={{textDecoration:"none"}}><button>Login</button></Link>
+            <Link to="/cart" style={{textDecoration:"none"}}><img  src={cart} alt="cart" /></Link>
+            {token?<button onClick={()=>{localStorage.removeItem('token'); window.location.replace('/')}} >Logout</button>:<Link to='/login' style={{textDecoration:"none"}}><button>Login</button></Link>}
+            
         </div>
     </div>
   )

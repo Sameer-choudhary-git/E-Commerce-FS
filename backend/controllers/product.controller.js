@@ -69,6 +69,16 @@ const all_id_in_sort = async (req, res) => {
     }
 }
 
+const allProduct_allCategory = async (req,res)=>{
+    try {
+        const products = await product_model.find();
+        res.status(200).send(products);
+    } catch (err) {
+        console.log("Error while fetching products: " + err);
+        res.status(500).send({ msg: "Internal server error" });
+    }
+}
+
 module.exports = {
-    addProduct,removeProduct,allProduct,all_id_in_sort
+    addProduct,removeProduct,allProduct,all_id_in_sort,allProduct_allCategory
 };

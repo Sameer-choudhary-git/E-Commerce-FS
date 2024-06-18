@@ -8,13 +8,13 @@ const AddProduct = () => {
 
 
     const [productDetails, setProductDetails] = useState({
-        id: null,
+        id: '',
         name: '',
         old_price: '',
         new_price: '',
-        description: "thuis is temp description",
+        description: "This is a product description.(just for testing)",
         category: 'women',
-        quantity: 99,
+        quantity: 1,
         image: null
     });
     
@@ -63,7 +63,7 @@ const AddProduct = () => {
         }).then(response => response.json()).then(data => {
             console.log('Product details:', data);
             alert('Product added successfully');
-            setProductDetails([]);
+            window.location.reload('/addProduct');
         }).catch(err => console.log(err));
 
 
@@ -110,6 +110,16 @@ const AddProduct = () => {
                             onChange={handleChange}
                             type="text"
                             name='new_price'
+                            placeholder='type here'
+                        />
+                    </div>
+                    <div className="addproduct-itemfield">
+                        <p>Qantity</p>
+                        <input
+                            value={productDetails.quantity}
+                            onChange={handleChange}
+                            type="text"
+                            name='quantity'
                             placeholder='type here'
                         />
                     </div>

@@ -1,41 +1,70 @@
 import React, {createContext, useState} from "react";
-import all_product from "../Components/Assets/all_product"
+// import all_product from "../Components/Assets/all_product"
+import { useEffect } from "react";
 
 export const ShopContext = createContext(null);
-const getDefaultCart = () => {
-        let cart={};
-        for (let index = 0; index < all_product.length+1; index++) {
-            cart[index] = 0;
-        }  
-        return cart;  
-    }
-    
 
 const ShopContextProvider = (props) => {
-    const [cartItems, setcartItems] = useState(getDefaultCart());
+    const [all_product, setAll_Product] = useState([]);
+    const token = localStorage.getItem('token');
+    const [cartItems, setcartItems] = useState([]);
+
+   
+    useEffect(() => {
+        fetch("http://localhost:8080/api/allProduct_allCategory")
+        .then((res)=>res.json())
+        .then((data)=>setAll_Product(data))
+        .catch((err)=>console.log(err));
+
+        getCartItems(); 
+    }, []); 
+    
+   
+    
     
     const addToCart = (itemid) => {
-        setcartItems((prev)=>({...prev,[itemid]:prev[itemid]+1}));
-        console.log(itemid);
+        if (token) {
+            fetch("http://localhost:8080/api/addToCart",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    Accept:"application/form-data",
+                    'token':token,
+                },
+                body:JSON.stringify({itemid:itemid})
+            }).then((res)=>res.json())
+            .then((data)=>{alert("Added into Cart");console.log(data)})
+        }
     };
     
-    const removeFromCart = (itemid) => {
-        setcartItems((prev)=>({...prev,[itemid]:prev[itemid]-1}));
-    };
+   
 
+
+    
+    const getCartItems = () => {
+        if (token) {
+            fetch("http://localhost:8080/api/getCartItems",{
+                method:"GET",
+                headers:{
+                    "Content-Type":"application/json",
+                    Accept:"application/form-data",
+                    'token':token,
+                },
+            }).then((res)=>res.json())
+            .then((data)=>{setcartItems(data);console.log(cartItems)})
+        }
+    }
+    
     const getTotalCartAmount = () => {  
         let totalAmount=0;
         for (const item in cartItems) {
-            if(cartItems[item]>0){
-                let itemInfo = all_product.find((product)=>product.id===Number(item));
-                totalAmount+= itemInfo.new_price*cartItems[item];
-            }
+            totalAmount += cartItems[item].new_price*cartItems[item].quantity;
             
         }
         return totalAmount;
     };
 
-    const contextValue = {all_product,cartItems,addToCart,removeFromCart,getTotalCartAmount};
+    const contextValue = {all_product,cartItems,addToCart,getTotalCartAmount,token};
     return(
         <ShopContext.Provider value={contextValue}>
             {props.children}

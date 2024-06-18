@@ -5,7 +5,33 @@ import { ShopContext } from '../../Context/shopContext';
 import remove_icon from "../Assets/cart_cross_icon.png"
 
 const CartItems = () => {
-    const {all_product,cartItems,removeFromCart,getTotalCartAmount} = useContext(ShopContext);
+    const token = localStorage.getItem('token');
+
+    const removeFromCart = async (itemid) => {
+        if (token) {
+            let headersList = {
+                "Content-Type": "application/json",
+                "token": token,
+                Accept: "application/json"
+               }
+               
+               let bodyContent = JSON.stringify({
+                   "itemid": itemid
+               });
+               
+               let response = await fetch("http://localhost:8080/api/removeFromCart", { 
+                 method: "POST",
+                 body: bodyContent,
+                 headers: headersList
+               });
+               
+               let data = await response.text();
+               console.log(data);
+               
+        }
+    };
+
+    const {cartItems,getTotalCartAmount} = useContext(ShopContext);
   return (
     <div className='cartitems'>
         <div className="cartitems-format-main">
@@ -20,21 +46,21 @@ const CartItems = () => {
         <div>
             
             
-            {all_product.map((e)=>{
-                if(cartItems[e.id]>0){
-                    return <div>
-                            <div className="cartitems-format cartitems-format-main">
-                                <img src={e.image} alt="img" className='carticon-product-icon' />
-                                <p>{e.name}</p>
-                                <p>{e.new_price}</p>
-                                <button className='cartitems-quantity'>{cartItems[e.id]}</button>
-                            <p>${e.new_price*cartItems[e.id]}</p>
-                                <img className='cartitem-remove-item' src={remove_icon} onClick={()=>{removeFromCart(e.id)}} alt="" />
-                            </div><hr />
+        {cartItems.map((item) => (
+                    <div key={item.id}>
+                        <div className="cartitems-format cartitems-format-main">
+                            <img src={item.image} alt="img" className='carticon-product-icon' />
+                            <p>{item.name}</p>
+                            <p>{item.new_price}</p>
+                            <button className='cartitems-quantity'>{item.quantity}</button>
+                            <p>${item.new_price * item.quantity}</p>
+                            <img className='cartitem-remove-item' src={remove_icon} onClick={ async () => { await removeFromCart(item.id); 
+                                window.location.reload();
+                             }} alt="" />
                         </div>
-                }
-                return null;
-            })}
+                        <hr />
+                    </div>
+                ))}
             <div className="cartitems-down">
                 <div className="cartitems-total">
                     <h1>Cart Total</h1>

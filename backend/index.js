@@ -7,9 +7,14 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const db_config = require('./configs/db.config');
-
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: allowedOrigins, 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization,token',
+};
+app.use(cors(corsOptions));
 
 
 mongoose.connect(db_config.DB_URL);
@@ -23,13 +28,16 @@ db.once('open', () =>{
     }
 );
 
-
+// basic server running test
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
 // routes
 require('./routes/product.route')(app);
+require('./routes/auth.route')(app);
+require('./routes/cart.route')(app);
+
 
 
 //multer 

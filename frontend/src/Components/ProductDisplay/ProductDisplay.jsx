@@ -7,6 +7,7 @@ import star_dull_icon from "../Assets/star_dull_icon.png";
 const ProductDisplay = (props) => {
     const {Product} = props;
     const {addToCart} = useContext(ShopContext);
+    const token = localStorage.getItem('token');
   return (
     <div className='productdisplay'>
         <div className="productdisplay-left">
@@ -35,7 +36,7 @@ const ProductDisplay = (props) => {
                 <div className="productdisplay-right-price-new">${Product.new_price}</div>
             </div>
             <div className="productdisplay-right-description">
-                THIS THE HELL IS SO CALLED DISCRPTION.
+                {Product.description}
             </div>
             <div className="productdisplay-right-size">
                 <h1>Select Size</h1>
@@ -46,7 +47,13 @@ const ProductDisplay = (props) => {
                     <div>XL</div>
                 </div>
             </div>
-            <button onClick={()=>{addToCart(Product.id);}} >Add to Cart</button>
+            <button onClick={()=>{
+                if (!token) {
+                    window.location.replace('/login');
+                } else {
+                    addToCart(Product.id)
+                }
+            }}>Add to Cart</button>
             <p className='productdisplay-right-category'><span>Category :</span>{Product.category}</p>
             <p className='productdisplay-right-category'><span>Tags :</span>{Product.category}</p>
         </div>
