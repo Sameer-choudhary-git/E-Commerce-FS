@@ -10,6 +10,19 @@ const ShopContextProvider = (props) => {
     const token = localStorage.getItem('token');
     const [cartItems, setcartItems] = useState([]);
 
+    const getCartItems = useCallback(() => {
+        if (token) {
+            fetch(`${BACKEND_URL}/api/getCartItems`,{
+                method:"GET",
+                headers:{
+                    "Content-Type":"application/json",
+                    Accept:"application/form-data",
+                    'token':token,
+                },
+            }).then((res)=>res.json())
+            .then((data)=>{setcartItems(data);console.log(cartItems)})
+        }
+    }, [token, cartItems])
    
     useEffect(() => {
         fetch(`${BACKEND_URL}/api/allProduct_allCategory`)
@@ -19,9 +32,6 @@ const ShopContextProvider = (props) => {
 
         getCartItems(); 
     }, [getCartItems]);
-    
-   
-    
     
     const addToCart = (itemid) => {
         if (token) {
@@ -37,24 +47,6 @@ const ShopContextProvider = (props) => {
             .then((data)=>{alert("Added into Cart");console.log(data)})
         }
     };
-    
-   
-
-
-    
-    const getCartItems = useCallback(() => {
-        if (token) {
-            fetch(`${BACKEND_URL}/api/getCartItems`,{
-                method:"GET",
-                headers:{
-                    "Content-Type":"application/json",
-                    Accept:"application/form-data",
-                    'token':token,
-                },
-            }).then((res)=>res.json())
-            .then((data)=>{setcartItems(data);console.log(cartItems)})
-        }
-    }, [token, cartItems])
     
     const getTotalCartAmount = () => {  
         let totalAmount=0;
