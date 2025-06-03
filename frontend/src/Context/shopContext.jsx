@@ -1,6 +1,5 @@
-import React, {createContext, useState} from "react";
+import React, {createContext, useState, useEffect, useCallback} from "react";
 // import all_product from "../Components/Assets/all_product"
-import { useEffect } from "react";
 
 export const ShopContext = createContext(null);
 
@@ -19,7 +18,7 @@ const ShopContextProvider = (props) => {
         .catch((err)=>console.log(err));
 
         getCartItems(); 
-    }, []);
+    }, [getCartItems]);
     
    
     
@@ -43,7 +42,7 @@ const ShopContextProvider = (props) => {
 
 
     
-    const getCartItems = () => {
+    const getCartItems = useCallback(() => {
         if (token) {
             fetch(`${BACKEND_URL}/api/getCartItems`,{
                 method:"GET",
@@ -55,7 +54,7 @@ const ShopContextProvider = (props) => {
             }).then((res)=>res.json())
             .then((data)=>{setcartItems(data);console.log(cartItems)})
         }
-    }
+    }, [token, cartItems])
     
     const getTotalCartAmount = () => {  
         let totalAmount=0;
