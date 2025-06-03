@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './CSS/loginsignup.css'
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const LoginSignup = () => {
   const [state, setstate] = useState("Login");
 
@@ -33,7 +36,7 @@ const LoginSignup = () => {
   }
 
   const createUser = async (user) => {
-    await fetch('http://localhost:8080/api/auth/signup', {
+    await fetch(`${BACKEND_URL}/api/auth/signup`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -59,7 +62,7 @@ const LoginSignup = () => {
     login_user.userId = user.userId;
     login_user.password = user.password;
     
-    await fetch('http://localhost:8080/api/auth/signin', {
+    await fetch(`${BACKEND_URL}/api/auth/signin`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

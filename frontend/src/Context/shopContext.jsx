@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 export const ShopContext = createContext(null);
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const ShopContextProvider = (props) => {
     const [all_product, setAll_Product] = useState([]);
     const token = localStorage.getItem('token');
@@ -11,20 +13,20 @@ const ShopContextProvider = (props) => {
 
    
     useEffect(() => {
-        fetch("http://localhost:8080/api/allProduct_allCategory")
+        fetch(`${BACKEND_URL}/api/allProduct_allCategory`)
         .then((res)=>res.json())
         .then((data)=>setAll_Product(data))
         .catch((err)=>console.log(err));
 
         getCartItems(); 
-    }, []); 
+    }, []);
     
    
     
     
     const addToCart = (itemid) => {
         if (token) {
-            fetch("http://localhost:8080/api/addToCart",{
+            fetch(`${BACKEND_URL}/api/addToCart`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
@@ -43,7 +45,7 @@ const ShopContextProvider = (props) => {
     
     const getCartItems = () => {
         if (token) {
-            fetch("http://localhost:8080/api/getCartItems",{
+            fetch(`${BACKEND_URL}/api/getCartItems`,{
                 method:"GET",
                 headers:{
                     "Content-Type":"application/json",
@@ -72,4 +74,4 @@ const ShopContextProvider = (props) => {
     )
 }
 
-export default ShopContextProvider;  
+export default ShopContextProvider;

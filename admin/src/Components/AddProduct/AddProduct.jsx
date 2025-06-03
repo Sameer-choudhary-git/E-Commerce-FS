@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './AddProduct.css';
 import upload_area from '../../assets/upload_area.svg';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const AddProduct = () => {
     
     
@@ -35,7 +37,7 @@ const AddProduct = () => {
         let formdata = new FormData();
         formdata.append('product', productDetails.image);
 
-        await fetch('http://localhost:8080/upload', {
+        await fetch(`${BACKEND_URL}/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -53,7 +55,7 @@ const AddProduct = () => {
             return;
         }
             
-        await fetch('http://localhost:8080/api/addProduct', {
+        await fetch(`${BACKEND_URL}/api/addProduct`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

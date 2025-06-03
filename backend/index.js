@@ -7,14 +7,9 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const db_config = require('./configs/db.config');
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
 app.use(express.json());
-const corsOptions = {
-    origin: allowedOrigins, 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization,token',
-};
-app.use(cors(corsOptions));
+
+app.use(cors());
 
 
 mongoose.connect(db_config.DB_URL);
@@ -54,7 +49,7 @@ app.use('/images',  express.static('upload/images'));
 app.post("/upload",upload.single('product'),(req, res)=>{
     res.json({
         success: 1,
-        image_url: `http://localhost:8080/images/${req.file.filename}`
+        image_url: `${index_config.BASE_URL}/images/${req.file.filename}`
     });
 })
 

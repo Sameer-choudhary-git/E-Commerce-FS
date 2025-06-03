@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './ListProduct.css';
 import cross_icon from '../../assets/cross_icon.png';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const ListProduct = () => {
   const [neededCategory, setNeededCategory] = useState('test');
   const [allproduct, setAllProduct] = useState([]);
@@ -16,7 +18,7 @@ const ListProduct = () => {
 
   const fetchProduct = async (value) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/allProduct?category=${value}`, {
+      const response = await fetch(`${BACKEND_URL}/api/allProduct?category=${value}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -37,7 +39,7 @@ const ListProduct = () => {
 
   const removeProduct = async (product) => {
     try {
-      await fetch('http://localhost:8080/api/removeProduct', {
+      await fetch(`${BACKEND_URL}/api/removeProduct`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
